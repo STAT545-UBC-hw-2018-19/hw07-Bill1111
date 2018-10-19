@@ -15,10 +15,10 @@ This is a repository for Zachary Sherker's STAT545 hw # 5 #.
 
 ## Links to the files in this repository can be found below:
 
-**Rmd file: 
+*Rmd file*: 
 
 https://github.com/STAT545-UBC-students/hw05-xcct2012/blob/master/STAT545_hw005.Rmd 
 
-**html file:
+*html file*:
 
 https://github.com/STAT545-UBC-students/hw05-xcct2012/blob/master/STAT545_hw005.html 
