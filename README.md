@@ -20,3 +20,4 @@ https://github.com/STAT545-UBC-students/hw05-xcct2012/blob/master/STAT545_hw005.
 
 html file:
 
+https://github.com/STAT545-UBC-students/hw05-xcct2012/blob/master/STAT545_hw005.html 
