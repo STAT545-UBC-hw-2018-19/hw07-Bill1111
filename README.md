@@ -11,3 +11,12 @@ In this assignment, I will:
 3) Improve a figure through the use of factor levels, smoother mechanics, color schemes.
 
 4) Convert this to a plotly visual.
+
+Links to the files in this repository can be found below:
+
+Rmd file: 
+
+https://github.com/STAT545-UBC-students/hw05-xcct2012/blob/master/STAT545_hw005.Rmd 
+
+html file:
+
