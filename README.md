@@ -1,24 +1,11 @@
-# STAT545 Homework 5
-## Zachary Sherker
+# STAT545 Homework 6
+## William Hall
 
-This is a repository for Zachary Sherker's STAT545 hw # 5 #.
+This is a repository for William Hall's STAT545 hw # 6 #.
 
-## In this assignment, I will:
+## In this assignment, I have chosen:
 
-1) Reorder a factor based on the data and demonstrate the effect in arranged data and in figures.
+2) Option #2: Create a function - this in the Part 1 folder: https://github.com/STAT545-UBC-students/hw06-Bill1111/tree/master/Part%201
 
-2) Write data to file and load it back into R.
+3) Option #3: Candy Data - this is in the Part 2 folder: https://github.com/STAT545-UBC-students/hw06-Bill1111/tree/master/Part%202
 
-3) Improve a figure through the use of factor levels, smoother mechanics, color schemes.
-
-4) Convert this to a plotly visual.
-
-## Links to the files in this repository can be found below:
-
-*Rmd file*: 
-
-https://github.com/STAT545-UBC-students/hw05-xcct2012/blob/master/STAT545_hw005.Rmd 
-
-*html file*:
-
-https://github.com/STAT545-UBC-students/hw05-xcct2012/blob/master/STAT545_hw005.html 
