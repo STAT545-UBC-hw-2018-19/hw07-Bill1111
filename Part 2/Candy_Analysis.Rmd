@@ -1,0 +1,136 @@
+---
+title: "Homework6"
+author: "William Hall"
+date: '2018-11-01'
+output: github_document
+always_allow_html: yes
+---
+
+For the second piece of this homework assignment, I have decided to explore the Candy dataset (since it is Halloween season). I downloaded the Candy dataset from this GitHub account: https://github.com/jennybc/candy. I will explore the first option:
+
+1. Examine how joy/despair scores change with age - I will focus on Joy
+
+This seems like a basic bivariate and regression analysis to me, so I will start with some of these comparisons - then move on to a regression analysis. Let's start with loading in the data.
+
+```{r}
+library("readr")
+library(tidyverse)
+library(dplyr)
+library("ggpubr")
+
+CANDY_HIERARCHY_2015_SURVEY_Responses <- read_csv("~/Documents/UBC/Term 7 - Sept. 2018/STAT 545/Homework/Hmk6/Part 2/CANDY-HIERARCHY-2015 SURVEY-Responses.csv")
+
+#View(CANDY_HIERARCHY_2015_SURVEY_Responses)
+
+CandyData <- CANDY_HIERARCHY_2015_SURVEY_Responses
+```
+
+
+#1. Clean the data and create new dataset
+
+The first thing I had to do was select the relevant columns that had data on Joy/Despair and the age column. Because there were so many, rather than using column names I used a more "base R" method that required more lines of code, but that was ultimately easier than writing out all the column names that I wanted.
+
+```{r}
+  
+CandyData1age <- CandyData[,2]   # select age
+CandyData1sea <- CandyData[,114] # select sea candy
+CandyData1nec <- CandyData[,115] # select necco waifer candy
+CandyData1 <- CandyData[,4:96]   # select the rest of the candy
+
+CandyData1 <- bind_cols(CandyData1,CandyData1age) # combine columns together
+
+CandyData1 <- bind_cols(CandyData1,CandyData1sea) # combine columns together
+
+CandyData1 <- bind_cols(CandyData1,CandyData1nec) # combine columns together
+
+```
+
+
+Ok. Now we finally have all the data we need. Now what we need to do is count the number of 'Joy's' that each person has responded to for each type of Canday. But first let's reorganize our columns to have the age column first. 
+
+```{r}
+CandyData2 <- CandyData1[,c(94,1:93,95:96)] #this will put the "How old are you column?" first
+#names(CandyData2) # test using names()
+```
+
+Great now lets create a series of columns that will count each "JOY". So we need to get this to run a function that will count '1' for every JOY for every column -> then create a new column that has the sum of every row. I also created another column that is the percent of Joys that a participant indicated.
+
+
+
+```{r}
+
+joyCount <- function(x){
+  
+  length(which(x=="JOY"))
+  
+}
+
+joyCount(CandyData2[1,])
+
+#this is another way to do this
+#buttCount <- str_count(CandyData2$`[Butterfinger]`, "JOY")
+#sum(buttCount, na.rm = TRUE)
+
+CandyData3 <- CandyData2 %>% 
+                  mutate(Joy = apply(., MARGIN=1, joyCount)) %>% 
+                  mutate(JoyPer = Joy/95*100)
+```
+
+I also discovered that this age data was pretty poorly constructed. There were a lot of errors that had to be converted into NA's, and unrealistic ages that had to be filtered out. I also changed the name of the age column to age.
+
+```{r}
+CandyData3$`How old are you?` <- as.numeric(CandyData3$`How old are you?`) #this converts the poorly inputed values into NAs
+CandyData4 <- filter(CandyData3, CandyData3$`How old are you?` < 200 & CandyData3$`How old are you?` > 1) #now we only want to choose rows are less than 200 because there might be some bad values in here, and we also limit the min age at 1 to avoid any typos that say that people are 0.
+
+names(CandyData4)[1]<-paste("age") #change name to age
+```
+
+#2. Bivariate Analysis
+
+Ok. Now that we have all our variables, let's start with some univariate examination. The mean age of respondents is `r round(mean(CandyData4$age), digits=2)`, the max age is `r round(max(CandyData4$age), digits=2)`, and the minimum age is `r round(min(CandyData4$age), digits=2)`.
+
+As an absolutely, the mean number of "Joyful" responses was `r round(mean(CandyData4$Joy), digits=2)`, the max number of "Joyful" responses was `r round(max(CandyData4$Joy), digits=2)`, and the minimum number of "Joyful" responses was `r round(min(CandyData4$Joy), digits=2)`.
+
+As a percentage, the mean percent of "Joyful" responseswas `r round(mean(CandyData4$JoyPer), digits=2)`%, the max number of "Joyful" responses was `r round(max(CandyData4$JoyPer), digits=2)`%, and the minimum number of "Joyful" responses was `r round(min(CandyData4$JoyPer), digits=2)`%.
+
+Next we can examine the correlation between these two variables.
+
+```{r}
+
+#Given the large sample size, we will use parametric correlation - pearson correlation
+#For more information visit this site: #http://www.sthda.com/english/wiki/correlation-test-between-two-variables-in-r
+
+cor.test(CandyData4$age, CandyData4$JoyPer, method=c("pearson"))
+```
+
+The correlation analysis suggests that there is a negative correlation between age and Joy. The pvalue is much less than .05 which means we can reject the null hypothesis that the correlation between the two variables is zero.
+
+Let's further examine the relationship via a scatter plot.
+
+```{r}
+ggplot(CandyData4, aes(x=age, y=Joy)) +
+  geom_point() +
+  xlab("Age") + 
+  ylab("Joy") + 
+  ggtitle("Age and Joy")
+```
+
+# 3. Regression Analysis
+
+Let's do a regression analysis. 
+
+```{r}
+linModel <- lm(CandyData4$Joy ~ CandyData4$age, data=CandyData4)
+summary(linModel)
+```
+
+Every 1 year increase in age will result in -0.13 decrease in Joy. Let's plot this.
+
+```{r}
+ggscatter(CandyData4, x = "age", y = "Joy", 
+          add = "reg.line", conf.int = TRUE, 
+          cor.coef = TRUE, cor.method = "pearson",
+          xlab = "Age", ylab = "Joy")
+```
+
+Overall, it seems like there is quite a bit of variation in Joy amongst people of different ages. I probably wouldn't use this linear model to predict someone's level of Joy.
