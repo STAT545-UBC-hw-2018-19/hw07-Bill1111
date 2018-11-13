@@ -1,0 +1,14 @@
+Package: EQ5D2Utility
+Type: Package
+Title: Change EQ 5D Index Scores to Utilities
+Version: 0.1.0
+Author: person(William, Hall, email = “will.hall50@gmail.com”, role =“aut”)
+License: MIT + file LICENCE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.0
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
